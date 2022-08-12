@@ -1,0 +1,31 @@
+.header {
+    background: #fff;
+    padding: 13px 0;
+
+    .container {
+        @media screen and (max-width: 1024px) {
+            max-width: 934px;
+        }
+
+        @media screen and (max-width: 768px) {
+            max-width: 734px;
+        }
+    }
+
+    &__logo {
+        a {
+            display: block;
+            max-width: 104px;
+            width: 100%;
+        }
+    }
+
+    &__wrap-btn {
+        max-width: 210px;
+        width: 100%;
+
+        button+button {
+            margin-left: 10px;
+        }
+    }
+}

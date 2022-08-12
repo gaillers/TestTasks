@@ -1,1 +1,38 @@
+// Fonts
+@import url("https://fonts.googleapis.com/css2?family=Nunito&display=swap");
+
+// Import base styles
 @import "base/reset";
+@import "base/grid";
+
+// Components
+@import "header";
+
+// Custom Styles
+
+.button {
+    max-width: 100px;
+    width: 100%;
+    border-radius: 80px;
+    border: none;
+    padding: 4px 0;
+
+
+    font-family: 'Nunito';
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 26px;
+    color: #201D08;
+
+    transition: all 0.4s ease-in;
+    cursor: pointer;
+
+    // &:hover,
+    // &:focus {
+    //     background: #F4E041;
+    // }
+
+    // &:disabled {
+    //     background: #B4B4B4;
+    // }
+}

@@ -35,10 +35,16 @@ const config = {
     rules: [
       {
         test: [
-          /\.jsx?$/
-        ], 
+          /\.js$|jsx/
+        ],
         exclude: /node_modules/,
         loader: 'babel-loader',
+        options: {
+          presets: ['@babel/preset-env',
+            '@babel/react', {
+              'plugins': ['@babel/plugin-proposal-class-properties']
+            }]
+        }
       },
       {
         test: /\.scss$/,
@@ -49,11 +55,22 @@ const config = {
         ]
       },
       {
-        test: /\.(png|svg|jpg|gif|pdf)$/,
+        test: /\.(png|svg|jpg|jpeg|gif|pdf|svg|eot|ttf|woff|woff2)$/,
         use: [
-          'file-loader'
-        ]
-      }
+          'file-loader',
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif)$/i,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+            },
+          },
+        ],
+      },
     ]
   }
 }
