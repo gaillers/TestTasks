@@ -6,16 +6,20 @@ import Teams from "../components/Team/Teams.jsx"
 
 const Working = () => {
     return (
-        <section className="working-section">
+        <WorkingSection>
             <div className="container">
                 <WorkingWrap>
                     <Heading title='Working with GET request' />
                     <Teams/>
                 </WorkingWrap>
             </div>
-        </section>
+        </WorkingSection>
     )
 }
+
+const WorkingSection = styled.section`
+    margin-bottom: 140px;
+`
 
 const WorkingWrap = styled.div`
     text-align: center;

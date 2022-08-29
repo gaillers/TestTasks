@@ -1,11 +1,11 @@
 import React from "react";
 import styled, { css } from 'styled-components';
 
-const Buttons = (props, type) => {
+const Buttons = (props) => {
     return (
         <Button primary
             className={`button ${props.class}`}
-            type={type} >
+            type={props.type} >
             {props.buttonTitle}
         </Button>
     )
