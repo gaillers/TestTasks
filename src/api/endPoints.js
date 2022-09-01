@@ -1,7 +1,7 @@
 export const getUsers = (callback) => {
-    const APIURL = 'https://frontend-test-assignment-api.abz.agency/api/v1/users?page=1&count=6';
+    const API_URL_USERS = 'https://frontend-test-assignment-api.abz.agency/api/v1/users?page=1&count=6';
 
-    fetch(APIURL)
+    fetch(API_URL_USERS)
         .then(res => {
             return res.json()
         })

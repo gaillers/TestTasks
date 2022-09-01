@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react"
 import styled from 'styled-components'
 import { useFormik } from 'formik'
+import { getPosition } from "../../api/endPosition.js"
+import { InputUpload } from "./UploadFile.js"
 import Submit from '../Buttons.jsx'
 
 // document.querySelector('input').addEventListener('focusin', function () {
@@ -14,6 +16,13 @@ import Submit from '../Buttons.jsx'
 // });
 
 export default function FormRegisterUser() {
+    const [positions, setPosition] = useState([])
+
+    useEffect(() => {
+        getPosition((paramPositions) => setPosition(paramPositions))
+    }, [])
+
+
     const onSubmit = (values) => {
         alert(JSON.stringify(values))
     }
@@ -22,7 +31,9 @@ export default function FormRegisterUser() {
         initialValues: {
             name: "",
             email: "",
-            phone: ""
+            phone: "",
+            position: "",
+            avatar: "",
         },
         validateOnBlur: true,
         onSubmit,
@@ -31,14 +42,17 @@ export default function FormRegisterUser() {
     return (
         <form onSubmit={formik.handleSubmit}>
             <InputItem>
-                <Label>Your Name</Label>
+                <Label htmlFor="name">Your Name</Label>
                 <Input
                     type="text"
                     name="name"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    value={formik.values.name}
                 />
             </InputItem>
             <InputItem>
-                <Label>Email</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                     type="email"
                     name="email"
@@ -48,7 +62,7 @@ export default function FormRegisterUser() {
                 />
             </InputItem>
             <InputItem>
-                <Label>Phone</Label>
+                <Label htmlFor="phone">Phone</Label>
                 <Input
                     type="text"
                     name="phone"
@@ -57,18 +71,32 @@ export default function FormRegisterUser() {
                     value={formik.values.phone}
                 />
             </InputItem>
-
             <InputRadioWrap>
                 <LabelRadio>Select your position</LabelRadio>
-                <RadioList>
-                    <RadioListItem>
-                        <RadioButton type="radio"/> 
-                        <RadioLabel>apple</RadioLabel>
-                    </RadioListItem>
-                </RadioList>
+                {positions.length > 0 && (
+                    <RadioList>
+                        {positions.map(position => (
+                            <RadioListItem key={position.id}>
+                                <RadioButton
+                                    id={`name: ${position.name}`}
+                                    name="position"
+                                    type="radio"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={position.name}
+                                />
+                                <RadioLabel
+                                    value={position.name}
+                                    htmlFor={`name: ${position.name}`}
+                                >
+                                    {position.name}
+                                </RadioLabel>
+                            </RadioListItem>
+                        ))}
+                    </RadioList>
+                )}
             </InputRadioWrap>
-
-
+            <InputUpload />
             <Submit
                 type={'submit'}
                 class={'btn-submit'}
@@ -146,17 +174,99 @@ text-align:left;
 `
 
 const RadioList = styled.ul`
-
+margin: 11px 0 47px;
 `
 
 const RadioListItem = styled.li`
-
+ margin-bottom: 7px;
+ &:last-child {
+    margin-bottom: 0;
+ }
 `
 
 const RadioButton = styled.input`
+&:checked, 
+&:not(:checked) {
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+  }
 
+  &:checked + label, 
+  &:not(:checked) + label {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    line-height: 26px;
+    display: inline-block;
+  }
+
+  &:checked + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 3px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #00BDD3;
+    border-radius: 100%;
+    background: #fff;
+  } 
+
+  &:not(:checked) + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 3px;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #D0CFCF;
+    border-radius: 100%;
+    background: transparent;
+    
+  }
+
+  &:checked + label:after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #00BDD3;
+    position: absolute;
+    top: 8px;
+    left: 5px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+  }
+
+  &:not(:checked) + label:after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    background: #F87DA9;
+    position: absolute;
+    top: 8px;
+    left: 5px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+
+  &:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
 `
 
 const RadioLabel = styled.label`
-
+font-family: 'Nunito';
+font-style: normal;
+font-weight: 400;
+font-size: 16px;
+color: rgba(0, 0, 0, 0.87);
 `
