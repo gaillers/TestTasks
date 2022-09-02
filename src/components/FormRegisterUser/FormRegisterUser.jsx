@@ -96,7 +96,11 @@ export default function FormRegisterUser() {
                     </RadioList>
                 )}
             </InputRadioWrap>
-            <InputUpload />
+
+            <InputUpload
+              
+            />
+            
             <Submit
                 type={'submit'}
                 class={'btn-submit'}

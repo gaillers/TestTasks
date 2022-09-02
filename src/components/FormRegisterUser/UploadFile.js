@@ -26,14 +26,6 @@ export const InputUpload = () => {
                 <button>Upload</button>
                 <span>Upload your photo</span>
             </label>
-
-            {/* <label htmlFor="avatar">Upload your photo</label>
-            <input
-                id="file-sr"
-                name="avatar"
-                type="file"
-                accept="image/png, image/gif, image/jpeg"
-            /> */}
         </Uploadfile>
     )
 }
@@ -51,7 +43,7 @@ text-align: left;
 }
 
 label {
-    display: block;
+    display: flex;
     background: #f8f8f800;
     border: 1px solid #D0CFCF;
     border-radius: 4px;
@@ -64,6 +56,12 @@ span {
     font-weight: 400;
     font-size: 16px;
     line-height: 26px;
+
+    max-width: 290px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 button {
@@ -96,5 +94,4 @@ button {
         color: rgba(0, 0, 0, 0.87);
     }
 }
-
 `
