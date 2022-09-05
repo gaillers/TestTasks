@@ -2,20 +2,32 @@ import React, { useEffect, useState } from "react"
 import styled from 'styled-components'
 import { useFormik } from 'formik'
 import { getPosition } from "../../api/endPosition.js"
-import { InputUpload } from "./UploadFile.js"
+// import { InputUpload } from "./UploadFile.js"
 import Submit from '../Buttons.jsx'
+import axios from "axios"
 
 // document.querySelector('input').addEventListener('focusin', function () {
 //     document.querySelector(this).parent().querySelector('label').classList.add('active');
 // });
-
 // document.querySelector('input').addEventListener('focusout', function () {
 //     if (!this.value) {
 //         document.querySelector(this).parent().querySelector('label').classList.remove('active');
 //     }
 // });
 
+
 export default function FormRegisterUser() {
+    const finputs = Array.from(document.querySelectorAll('.file-upload [type="file"]'));
+    finputs.forEach((input) => {
+        input.addEventListener("change", (e) => {
+            const path = e.target.value;
+            const filenameField = e.target.parentElement.querySelector("span");
+            const filename = path.split(/\/|\\/).pop();
+            if (filename) filenameField.innerText = filename;
+            else filenameField.innerText = "Filename";
+        });
+    });
+
     const [positions, setPosition] = useState([])
 
     useEffect(() => {
@@ -23,8 +35,9 @@ export default function FormRegisterUser() {
     }, [])
 
 
-    const onSubmit = (values) => {
+    const onSubmit = (values, e) => {
         alert(JSON.stringify(values))
+        console.log(JSON.stringify(values))
     }
 
     const formik = useFormik({
@@ -49,6 +62,7 @@ export default function FormRegisterUser() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
+                    required
                 />
             </InputItem>
             <InputItem>
@@ -59,6 +73,7 @@ export default function FormRegisterUser() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.email}
+                    required
                 />
             </InputItem>
             <InputItem>
@@ -69,6 +84,7 @@ export default function FormRegisterUser() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.phone}
+                    required
                 />
             </InputItem>
             <InputRadioWrap>
@@ -84,6 +100,7 @@ export default function FormRegisterUser() {
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={position.name}
+                                    required
                                 />
                                 <RadioLabel
                                     value={position.name}
@@ -97,10 +114,22 @@ export default function FormRegisterUser() {
                 )}
             </InputRadioWrap>
 
-            <InputUpload
-              
-            />
-            
+            <Uploadfile className="file-upload reverse">
+                <input
+                    id="file-sr"
+                    name="avatar"
+                    type="file"
+                    accept='.jpeg, .jpg'
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    required
+                />
+                <label htmlFor="file-sr">
+                    <button>Upload</button>
+                    <span>Upload your photo</span>
+                </label>
+            </Uploadfile>
+
             <Submit
                 type={'submit'}
                 class={'btn-submit'}
@@ -114,6 +143,11 @@ const InputItem = styled.div`
 position: relative;
 max-width: 380px;
 width: 100%;
+margin: 50px auto 0;
+
+&div+div {
+    margin: auto;
+}
 `
 
 const Label = styled.label`
@@ -175,10 +209,11 @@ const InputRadioWrap = styled.div`
 max-width: 380px;
 width: 100%;
 text-align:left;
+margin: 25px auto 47px;
 `
 
 const RadioList = styled.ul`
-margin: 11px 0 47px;
+margin: 11px 0 0px;
 `
 
 const RadioListItem = styled.li`
@@ -273,4 +308,69 @@ font-style: normal;
 font-weight: 400;
 font-size: 16px;
 color: rgba(0, 0, 0, 0.87);
+`
+const Uploadfile = styled.div`
+
+position: relative;
+max-width: 380px;
+width: 100%;
+text-align: left;
+margin: 0 auto 50px;
+
+[type="file"] {
+    display: none;
+}
+
+label {
+    display: flex;
+    background: #f8f8f800;
+    border: 1px solid #D0CFCF;
+    border-radius: 4px;
+    height: 54px;
+}
+
+span {
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 26px;
+
+    max-width: 290px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+button {
+    all: unset;
+    font-family: 'Nunito';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 26px;
+    pointer-events: none;
+    border: 1px solid rgba(0, 0, 0, 0.87);
+    border-radius: 4px 0px 0px 4px;
+    cursor: pointer;
+}
+
+span,
+button {
+    transition: .2s ease;
+    padding: 12px 16px;
+}
+
+&.reverse:not(.column:checked) {
+    span {
+        color: #7E7E7E;
+    }
+}
+
+&.reverse {
+    span {
+        color: rgba(0, 0, 0, 0.87);
+    }
+}
 `
