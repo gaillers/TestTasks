@@ -60,7 +60,7 @@ export default function FormRegisterUser() {
                 .matches(phoneRegExp, 'Phone number is not valid')
                 .required('Required'),
             photo: Yup.mixed()
-                .test('File_Size', 'Too Big!', (value) => value && value.size < 70 * 70 )
+                .test('File_Size', 'Please photo size 70x70', (value) => value && value.size < 70 * 70 )
                 .test('File_Type', 'Invalid!', (value) => value && ['image/jpg', 'image/jpeg'].includes(value.type))
                 .required('Required'),
         }),
@@ -71,7 +71,6 @@ export default function FormRegisterUser() {
     })
 
     // console.log(formik.errors)
-
 
     return (
         <form onSubmit={formik.handleSubmit}>
@@ -360,7 +359,7 @@ margin: 0 auto 50px;
 label {
     display: flex;
     background: #f8f8f800;
-    border: 1px solid #D0CFCF;
+    // border: 1px solid #D0CFCF;
     border-radius: 4px;
     height: 54px;
 }
@@ -372,11 +371,17 @@ span {
     font-size: 16px;
     line-height: 26px;
 
-    max-width: 290px;
+    max-width: 300px;
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    border: 1px solid #D0CFCF;
+    border-radius: 4px;
+    border-left-style: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
 }
 
 button {
@@ -392,11 +397,13 @@ button {
     cursor: pointer;
 }
 
-span,
-button {
-    transition: .2s ease;
+
+button,
+span  {
+    // transition: .2s ease;
     padding: 12px 16px;
 }
+
 
 &.reverse:not(.column:checked) {
     span {
@@ -411,12 +418,13 @@ button {
 }
 
 &.input-errors {
-    input {
+    button,
+    span {
         border: 2px solid #CB3D40;
     }
 
-    label {
-        color: #CB3D40;
+    span {
+        border-left-style: none;
     }
 
     helper,
