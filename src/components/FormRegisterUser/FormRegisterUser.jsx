@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
 import styled from 'styled-components'
 import { useFormik } from 'formik'
+import * as Yup from 'yup';
 import { getPosition } from "../../api/endPosition.js"
 // import { InputUpload } from "./UploadFile.js"
 import Submit from '../Buttons.jsx'
@@ -38,6 +39,23 @@ export default function FormRegisterUser() {
         console.log(JSON.stringify(values))
     }
 
+    const phoneRegExp = /^[\+]{0,1}380([0-9]{9})$/
+
+    const basicValidationSchema = Yup.object().shape({
+        name: Yup.string()
+            .min(2, 'Please enter your name.')
+            .required('Required'),
+        email: Yup.string()
+            .email('Wrong email address enter')
+            .required('Required'),
+        phone: Yup.string()
+            .matches(phoneRegExp, 'Phone number is not valid')
+            .required('Required'),
+        // avatar: Yup.string()
+        //     .matches(phoneRegExp, 'Phone number is not valid')
+
+    });
+
 
     const formik = useFormik({
         initialValues: {
@@ -47,13 +65,20 @@ export default function FormRegisterUser() {
             position: "",
             avatar: "",
         },
+
+        touched: true,
+        errors: true,
         validateOnBlur: true,
+        validationSchema: basicValidationSchema,
         onSubmit,
     })
 
+    // console.log(formik.errors)
+
+
     return (
         <form onSubmit={formik.handleSubmit}>
-            <InputItem>
+            <InputItem className={formik.errors.name && formik.touched.name ? "input-errors" : ""}>
                 <Label htmlFor="name">Your Name</Label>
                 <Input
                     type="text"
@@ -61,10 +86,10 @@ export default function FormRegisterUser() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
-               
                 />
+                {formik.errors.name && formik.touched.name && <p className="error">{formik.errors.name}</p>}
             </InputItem>
-            <InputItem>
+            <InputItem className={formik.errors.email && formik.touched.email ? "input-errors" : ""}>
                 <Label htmlFor="email">Email</Label>
                 <Input
                     type="email"
@@ -73,8 +98,9 @@ export default function FormRegisterUser() {
                     onBlur={formik.handleBlur}
                     value={formik.values.email}
                 />
+                {formik.errors.email && formik.touched.email && <p className="error">{formik.errors.email}</p>}
             </InputItem>
-            <InputItem>
+            <InputItem className={formik.errors.phone && formik.touched.phone ? "input-errors" : ""}>
                 <Label htmlFor="phone">Phone</Label>
                 <Input
                     type="text"
@@ -83,6 +109,7 @@ export default function FormRegisterUser() {
                     onBlur={formik.handleBlur}
                     value={formik.values.phone}
                 />
+                {formik.errors.phone && formik.touched.phone && <p className="error">{formik.errors.phone}</p>}
             </InputItem>
             <InputRadioWrap>
                 <LabelRadio>Select your position</LabelRadio>
@@ -139,9 +166,26 @@ position: relative;
 max-width: 380px;
 width: 100%;
 margin: 50px auto 0;
+border-radius: 4px;
 
-&div+div {
-    margin: auto;
+&.input-errors {
+    input {
+        border: 2px solid #CB3D40;
+    }
+
+    label {
+        color: #CB3D40;
+    }
+
+    helper,
+    .error {
+        position: absolute;
+        font-family: 'Nunito';
+        font-size: 12px;
+        line-height: 14px;
+        color: #CB3D40;
+        padding: 4px 16px;
+    }
 }
 `
 
@@ -204,7 +248,7 @@ const InputRadioWrap = styled.div`
 max-width: 380px;
 width: 100%;
 text-align:left;
-margin: 25px auto 47px;
+margin:47px auto;
 `
 
 const RadioList = styled.ul`
