@@ -28,33 +28,18 @@ export default function FormRegisterUser() {
     });
 
     const [positions, setPosition] = useState([])
-
     useEffect(() => {
         getPosition((paramPositions) => setPosition(paramPositions))
     }, [])
 
-    const onSubmit = (values, e) => {
+    const onSubmit = async (values, actions) => {
         alert(JSON.stringify(values))
-        console.log(JSON.stringify(values))
+        console.log(formik.values)
+        await new Promise((res) => setTimeout(res, 1000))
+        actions.resetForm()
     }
 
     const phoneRegExp = /^[\+]{0,1}380([0-9]{9})$/;
-
-    const basicValidationSchema = Yup.object().shape({
-        name: Yup.string()
-            .min(2, 'Please enter your name.')
-            .required('Required'),
-        email: Yup.string()
-            .email('Wrong email address enter')
-            .required('Required'),
-        phone: Yup.string()
-            .matches(phoneRegExp, 'Phone number is not valid')
-            .required('Required'),
-        // avatar: Yup.string()
-        //     .matches(phoneRegExp, 'Phone number is not valid')
-
-    });
-
 
     const formik = useFormik({
         initialValues: {
@@ -62,13 +47,26 @@ export default function FormRegisterUser() {
             email: "",
             phone: "",
             position: "",
-            avatar: "",
+            photo: "",
         },
-
+        validationSchema: Yup.object({
+            name: Yup.string()
+                .min(2, 'Please enter your name.')
+                .required('Required'),
+            email: Yup.string()
+                .email('Wrong email address enter')
+                .required('Required'),
+            phone: Yup.string()
+                .matches(phoneRegExp, 'Phone number is not valid')
+                .required('Required'),
+            photo: Yup.mixed()
+                .test('File_Size', 'Too Big!', (value) => value && value.size < 70 * 70 )
+                .test('File_Type', 'Invalid!', (value) => value && ['image/jpg', 'image/jpeg'].includes(value.type))
+                .required('Required'),
+        }),
         touched: true,
         errors: true,
         validateOnBlur: true,
-        validationSchema: basicValidationSchema,
         onSubmit,
     })
 
@@ -135,23 +133,24 @@ export default function FormRegisterUser() {
                     </RadioList>
                 )}
             </InputRadioWrap>
-
-            <Uploadfile className="file-upload reverse">
+            <Uploadfile className={`file-upload reverse ${formik.errors.photo && formik.touched.photo ? "input-errors" : ""}`}>
                 <input
                     id="file-sr"
-                    name="avatar"
+                    name="photo"
                     type="file"
                     accept='.jpeg, .jpg'
-                    onChange={formik.handleChange}
+                    onChange={(e) => {
+                        formik.setFieldValue("photo", e.target.files[0])}}
                     onBlur={formik.handleBlur}
                 />
                 <label htmlFor="file-sr">
                     <button>Upload</button>
                     <span>Upload your photo</span>
                 </label>
+                {formik.errors.photo && formik.touched.photo && <p className="error">{formik.errors.photo}</p>}
             </Uploadfile>
-
             <Submit
+                // disabled={!(formik.isValid && formik.dirty)}
                 type={'submit'}
                 class={'btn-submit'}
                 buttonTitle={'Sign up'}
@@ -348,7 +347,6 @@ font-size: 16px;
 color: rgba(0, 0, 0, 0.87);
 `
 const Uploadfile = styled.div`
-
 position: relative;
 max-width: 380px;
 width: 100%;
@@ -409,6 +407,26 @@ button {
 &.reverse {
     span {
         color: rgba(0, 0, 0, 0.87);
+    }
+}
+
+&.input-errors {
+    input {
+        border: 2px solid #CB3D40;
+    }
+
+    label {
+        color: #CB3D40;
+    }
+
+    helper,
+    .error {
+        position: absolute;
+        font-family: 'Nunito';
+        font-size: 12px;
+        line-height: 14px;
+        color: #CB3D40;
+        padding: 4px 16px;
     }
 }
 `

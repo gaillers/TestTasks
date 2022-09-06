@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 const Buttons = (props) => {
     return (
         <Button primary
+            disabled={props.disabled}
             className={`button ${props.class}`}
             type={props.type} >
             {props.buttonTitle}
