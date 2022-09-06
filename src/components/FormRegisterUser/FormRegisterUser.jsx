@@ -15,7 +15,6 @@ import Submit from '../Buttons.jsx'
 //     }
 // });
 
-
 export default function FormRegisterUser() {
     const finputs = Array.from(document.querySelectorAll('.file-upload [type="file"]'));
     finputs.forEach((input) => {
@@ -39,7 +38,7 @@ export default function FormRegisterUser() {
         console.log(JSON.stringify(values))
     }
 
-    const phoneRegExp = /^[\+]{0,1}380([0-9]{9})$/
+    const phoneRegExp = /^[\+]{0,1}380([0-9]{9})$/;
 
     const basicValidationSchema = Yup.object().shape({
         name: Yup.string()
@@ -79,7 +78,7 @@ export default function FormRegisterUser() {
     return (
         <form onSubmit={formik.handleSubmit}>
             <InputItem className={formik.errors.name && formik.touched.name ? "input-errors" : ""}>
-                <Label htmlFor="name">Your Name</Label>
+                <Label id="label" htmlFor="name">Your Name</Label>
                 <Input
                     type="text"
                     name="name"
@@ -90,7 +89,7 @@ export default function FormRegisterUser() {
                 {formik.errors.name && formik.touched.name && <p className="error">{formik.errors.name}</p>}
             </InputItem>
             <InputItem className={formik.errors.email && formik.touched.email ? "input-errors" : ""}>
-                <Label htmlFor="email">Email</Label>
+                <Label id="label" htmlFor="email">Email</Label>
                 <Input
                     type="email"
                     name="email"
