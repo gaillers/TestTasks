@@ -47,6 +47,14 @@ const HeroWrap = styled.div`
     background-size: 160rem;
     background-position: center -52rem;
 
+    h1 {
+        margin-bottom: 21px;
+    }
+    
+    p {
+        margin-bottom: 32px;
+    }
+
     @media screen and (max-width: 1024px) {
         background-size: 160rem;
         background-position: center -52rem;

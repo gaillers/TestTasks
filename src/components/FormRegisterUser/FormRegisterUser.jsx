@@ -35,6 +35,7 @@ export default function FormRegisterUser() {
 
     const onSubmit = async (actions) => {
         console.log(formik.values)
+        
         await new Promise((res) => setTimeout(res, 1000))
         alert('Sent to RestAPI')
         actions.resetForm()
