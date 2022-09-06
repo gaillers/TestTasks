@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
 import styled from 'styled-components'
+import axios from 'axios'
 import { useFormik } from 'formik'
 import * as Yup from 'yup';
 import { getPosition } from "../../api/endPosition.js"
@@ -32,10 +33,10 @@ export default function FormRegisterUser() {
         getPosition((paramPositions) => setPosition(paramPositions))
     }, [])
 
-    const onSubmit = async (values, actions) => {
-        alert(JSON.stringify(values))
+    const onSubmit = async (actions) => {
         console.log(formik.values)
         await new Promise((res) => setTimeout(res, 1000))
+        alert('Sent to RestAPI')
         actions.resetForm()
     }
 
@@ -46,7 +47,7 @@ export default function FormRegisterUser() {
             name: "",
             email: "",
             phone: "",
-            position: "",
+            position_id: "",
             photo: "",
         },
         validationSchema: Yup.object({
@@ -60,7 +61,7 @@ export default function FormRegisterUser() {
                 .matches(phoneRegExp, 'Phone number is not valid')
                 .required('Required'),
             photo: Yup.mixed()
-                .test('File_Size', 'Please photo size 70x70', (value) => value && value.size < 70 * 70 )
+                .test('File_Size', 'Please photo size 70x70', (value) => value && value.size < 70 * 70)
                 .test('File_Type', 'Invalid!', (value) => value && ['image/jpg', 'image/jpeg'].includes(value.type))
                 .required('Required'),
         }),
@@ -115,7 +116,7 @@ export default function FormRegisterUser() {
                             <RadioListItem key={position.id}>
                                 <RadioButton
                                     id={`name: ${position.name}`}
-                                    name="position"
+                                    name="position_id"
                                     type="radio"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
@@ -139,7 +140,8 @@ export default function FormRegisterUser() {
                     type="file"
                     accept='.jpeg, .jpg'
                     onChange={(e) => {
-                        formik.setFieldValue("photo", e.target.files[0])}}
+                        formik.setFieldValue("photo", e.target.files[0])
+                    }}
                     onBlur={formik.handleBlur}
                 />
                 <label htmlFor="file-sr">
