@@ -4,7 +4,6 @@ import { useFormik } from 'formik'
 import { getPosition } from "../../api/endPosition.js"
 // import { InputUpload } from "./UploadFile.js"
 import Submit from '../Buttons.jsx'
-import axios from "axios"
 
 // document.querySelector('input').addEventListener('focusin', function () {
 //     document.querySelector(this).parent().querySelector('label').classList.add('active');
@@ -34,11 +33,11 @@ export default function FormRegisterUser() {
         getPosition((paramPositions) => setPosition(paramPositions))
     }, [])
 
-
     const onSubmit = (values, e) => {
         alert(JSON.stringify(values))
         console.log(JSON.stringify(values))
     }
+
 
     const formik = useFormik({
         initialValues: {
@@ -62,7 +61,7 @@ export default function FormRegisterUser() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.name}
-                    required
+               
                 />
             </InputItem>
             <InputItem>
@@ -73,7 +72,6 @@ export default function FormRegisterUser() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.email}
-                    required
                 />
             </InputItem>
             <InputItem>
@@ -84,7 +82,6 @@ export default function FormRegisterUser() {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.phone}
-                    required
                 />
             </InputItem>
             <InputRadioWrap>
@@ -100,7 +97,6 @@ export default function FormRegisterUser() {
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={position.name}
-                                    required
                                 />
                                 <RadioLabel
                                     value={position.name}
@@ -122,7 +118,6 @@ export default function FormRegisterUser() {
                     accept='.jpeg, .jpg'
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    required
                 />
                 <label htmlFor="file-sr">
                     <button>Upload</button>
@@ -133,7 +128,7 @@ export default function FormRegisterUser() {
             <Submit
                 type={'submit'}
                 class={'btn-submit'}
-                buttonTitle={'Submit'}
+                buttonTitle={'Sign up'}
             />
         </form>
     )
